@@ -121,7 +121,8 @@ public class ShortestPath {
 			System.out.printf("Total cost (temporarily): %f\n", totalPathCost);
 					
 			//adding the visited node to the final path
-			resultingPath.add(tmpSource);
+			if(tmpSource != source)
+				resultingPath.add(tmpSource);
 			
 			//setting the next node to visit
 			tmpSource = nextSource;
@@ -132,8 +133,12 @@ public class ShortestPath {
 		
 		System.out.printf("Steps for the calculation (visited nodes): %d\n\n\n", counter+1);
 		
+		//add the path as already done to avoid duplicates
 		int[] pathDone = {source, destination};
 		pathAlreadyDone.add(pathDone);
+		
+		//print the path just found
+		printPath(resultingPath);
 		
 		return resultingPath;
 	}
@@ -144,5 +149,6 @@ public class ShortestPath {
 			System.out.printf("%d", i);
 			System.out.printf(" --> ");
 		}
+		System.out.printf("END\n\n");
 	}
 }
