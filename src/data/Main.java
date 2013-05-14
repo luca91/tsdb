@@ -18,8 +18,8 @@ public class Main {
 		data.getDataFromDB(conn.getConn());
 		data.manageData();
 		ShortestPath aPath = new ShortestPath();
-		System.out.printf("###############################################################\n");
-		System.out.printf("ALL PATH CALCULATION START");
+		System.out.printf("\n###############################################################\n");
+		System.out.printf("ALL PATH CALCULATION START\n");
 		System.out.printf("###############################################################\n\n");
 		for (int i = 0; i < 21694; i++){
 			System.out.printf("##########################\n");

@@ -1,6 +1,8 @@
 package data;
 
 import java.lang.reflect.Array;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Vector;
 
@@ -66,8 +68,25 @@ public class ShortestPath {
 		for(int i = 0; i < ARRAY_LENGTH; i++)
 			visited[i] = false;
 		
+		//creating the queue for the node and populating it
+		PriorityQueue<Node> queue = new PriorityQueue<Node>(1, new Comparator<Node>() {
+			public int compare(Node n1, Node n2){
+				if(n1.getDistance() < n2.getDistance())
+					return -1;
+				if(n1.getDistance() == n1.getDistance())
+					return 0;
+				if(n1.getDistance() > n2.getDistance())
+					return 1;
+				return 2;
+			}
+		});
+		for(int i = 0; i < ARRAY_LENGTH; i++){
+			Node n = new Node(i, distances[i]);
+			queue.add(n);
+		}
+		
 		//the next node to visit
-		int nextSource = -1;
+		//int nextSource = -1;
 		int tmpSource = source;
 		
 		//the total cost of the path
@@ -79,37 +98,55 @@ public class ShortestPath {
 		//auxiliary counter for the steps
 		int counter = 0;
 		
+		//extracting the source from the queue
+		Node aNode = queue.poll();
+		
 		//loop for searching the path
-		while(!visited[tmpSource] && tmpSource != destination && !exist){
+		while(aNode != null && tmpSource != destination && !exist){
 			System.out.printf("####################\n");
+			System.out.printf("TmpSource: %d\n", tmpSource);
 			
 			//storing temporarily the neighbors of the current node
 			NodeConnections currentConnection = connections[tmpSource];
 			int[] currentNeighbors = new int[currentConnection.getListNode().size()];
+			
 			for(int i = 0; i < currentNeighbors.length; i++){
 				currentNeighbors[i] = (int) Array.getDouble(currentConnection.getListNode().get(i), 1);
 				System.out.printf("Neighbor nr. %d: %d\n", i, currentNeighbors[i]);
 			}
 			
 			//calculate the distance from the source to each of the neighbor
-			double tmpDistance = INFINITY;
+			//double tmpDistance = INFINITY;
 			for(int i = 0; i < currentNeighbors.length; i++){
-				double currentNeighborDistance = distances[currentNeighbors[i]];
-				
-				System.out.printf("Current neighbor distance (ID = %d): %f\n", currentNeighbors[i], currentNeighborDistance);
-				
-				//updating the distances of the neighbors
-				if(currentNeighborDistance > (Array.getDouble(currentConnection.getListNode().get(i), 2) + totalPathCost)){
-					distances[currentNeighbors[i]] = (Array.getDouble(currentConnection.getListNode().get(i), 2) + totalPathCost);
-					System.out.printf("New neighbor distance (ID = %d): %f\n", currentNeighbors[i], distances[currentNeighbors[i]]);
-				}
-				
-				//finding the neighbor with smallest distance
-				if(distances[currentNeighbors[i]] < tmpDistance && !visited[currentNeighbors[i]]){
-					nextSource = currentNeighbors[i];
-					tmpDistance = distances[currentNeighbors[i]];
-					System.out.printf("Next node to visit (temporarily): %d\n", nextSource);
-					System.out.printf("Distance to the next node (temporarily): %f\n", tmpDistance);
+				if(!visited[currentNeighbors[i]]){
+					double currentNeighborDistance = distances[currentNeighbors[i]];
+	
+					//node with the old distance
+					Node n = new Node((int) currentNeighbors[i], distances[currentNeighbors[i]]);
+					
+					System.out.printf("Current neighbor distance (ID = %d): %f\n", currentNeighbors[i], currentNeighborDistance);
+					
+					//updating the distances of the neighbors
+					if(currentNeighborDistance > (Array.getDouble(currentConnection.getListNode().get(i), 2) + totalPathCost) && !visited[currentNeighbors[i]]){
+						distances[currentNeighbors[i]] = (Array.getDouble(currentConnection.getListNode().get(i), 2) + totalPathCost);
+						System.out.printf("New neighbor distance (ID = %d): %f\n", currentNeighbors[i], distances[currentNeighbors[i]]);
+					}
+					
+					//remove the node with the old distance and create the new one with the updated distance
+					if(!visited[currentNeighbors[i]]){
+						queue.remove(n);
+						n = new Node((int) Array.getDouble(currentConnection.getListNode().get(i), 1), distances[currentNeighbors[i]]);
+						queue.add(n);
+					}
+					
+					/*
+					//finding the neighbor with smallest distance
+					if(distances[currentNeighbors[i]] < tmpDistance && !visited[currentNeighbors[i]]){
+						nextSource = currentNeighbors[i];
+						tmpDistance = distances[currentNeighbors[i]];
+						System.out.printf("Next node to visit (temporarily): %d\n", nextSource);
+						System.out.printf("Distance to the next node (temporarily): %f\n", tmpDistance);
+					}*/
 				}
 			}
 			
@@ -117,7 +154,7 @@ public class ShortestPath {
 			visited[tmpSource] = true;
 			
 			//updating the total cost
-			totalPathCost = tmpDistance;
+			totalPathCost += aNode.getDistance();
 			System.out.printf("Total cost (temporarily): %f\n", totalPathCost);
 					
 			//adding the visited node to the final path
@@ -125,7 +162,13 @@ public class ShortestPath {
 				resultingPath.add(tmpSource);
 			
 			//setting the next node to visit
-			tmpSource = nextSource;
+			//tmpSource = nextSource;
+			aNode = queue.poll();
+			if(aNode != null){
+				tmpSource = aNode.getId();
+				System.out.printf("TmpSource: %d\n", tmpSource);
+				System.out.printf("Next node to visit (temporarily): %d\n", tmpSource);
+			}
 			
 			counter++;
 			System.out.printf("####################\n");
