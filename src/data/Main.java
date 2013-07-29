@@ -1,5 +1,6 @@
 package data;
 
+import java.util.Random;
 import java.util.Vector;
 
 public class Main {
@@ -32,6 +33,13 @@ public class Main {
 		System.out.printf("###############################################################\n");
 		System.out.printf("ALL PATH CALCULATION END\n");
 		System.out.printf("###############################################################");
+	}
+	
+	public int generateRandomNumbers(){
+		Random rm = new Random();
+		int number = rm.nextInt(21048);
+		System.out.printf("Random number: %d\n", number);
+		return number;		
 	}
 
 }

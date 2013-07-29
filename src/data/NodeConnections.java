@@ -7,8 +7,7 @@ public class NodeConnections {
 	private int startNodeId;
 	Vector<double[]> connections = new Vector<double[]>(1,1); 
 
-	public double[] getConnections(int indexMatrix) {
-		// TODO Auto-generated method stub
+	public double[] getConnectionAt(int indexMatrix) {
 		return connections.get(indexMatrix);
 	}
 	
@@ -20,7 +19,7 @@ public class NodeConnections {
 		connections.add(toSet);
 	}
 	
-	public Vector<double[]> getListNode(){
+	public Vector<double[]> getConnections(){
 		return connections;
 	}
 	
