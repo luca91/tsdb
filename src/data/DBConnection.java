@@ -15,8 +15,8 @@ public class DBConnection {
     public boolean getDBConnection() throws Exception{
 		try {
 			Class.forName("org.postgresql.Driver");
-			String connectionUrl = "jdbc:postgresql://localhost/postgres?user=postgres&password=postgres";
-			conn = DriverManager.getConnection(connectionUrl);
+			String connectionUrl = "jdbc:postgresql://localhost:5432/tsdb"; 
+			conn = DriverManager.getConnection(connectionUrl, "postgres","admin");
 			return true;
 		} catch (ClassNotFoundException e) {
 			System.out.println("Could not find the database driver");

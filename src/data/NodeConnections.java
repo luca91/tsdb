@@ -15,7 +15,7 @@ public class NodeConnections {
 		this.startNodeId = id;
 	}
 	
-	public void setConnections(double[] toSet){
+	public void setConnection(double[] toSet){
 		connections.add(toSet);
 	}
 	
