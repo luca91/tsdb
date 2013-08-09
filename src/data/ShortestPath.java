@@ -87,7 +87,7 @@ public class ShortestPath {
 			n = q.poll();
 			visited.add(n);
 			current = n.getID();
-			System.out.println("Next node: " + current);
+			System.out.println("Next node: " + current);	
 						
 			//source and destination (to remember)
 			System.out.println("Source: " + source);
@@ -105,7 +105,7 @@ public class ShortestPath {
 									current,
 									(int) Array.getDouble(conn.getConnectionAt(i), 1));
 				
-				if(visited.contains(n))
+				if(visited.contains(sibling))
 					continue;
 				
 				//if the sibling is already in the queue is removed and reinserted to update the distance
@@ -121,7 +121,8 @@ public class ShortestPath {
 				
 				//setting the updated sibling and inserting it to the queue
 				sibling.setTotalCost(dist);
-				q.add(sibling);
+				if(!visited.contains(sibling) && previous[n.getID()] != sibling.getID())
+					q.add(sibling);
 				System.out.println("New Distance to sibling "+ (int) Array.getDouble(conn.getConnectionAt(i), 1) + ": " + dist);
 			}
 			
