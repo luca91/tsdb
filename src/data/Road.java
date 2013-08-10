@@ -23,22 +23,18 @@ public class Road {
 	}
 
 	public int getEndNode() {
-		// TODO Auto-generated method stub
 		return endNodeId;
 	}
 
 	public int getStartNode() {
-		// TODO Auto-generated method stub
 		return startNodeId;
 	}
 
 	public double getDistance() {
-		// TODO Auto-generated method stub
 		return distance;
 	}
 
-	public double getEdgeId() {
-		// TODO Auto-generated method stub
+	public int getEdgeId() {
 		return edgeId;
 	}
 
