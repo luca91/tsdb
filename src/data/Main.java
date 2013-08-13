@@ -18,6 +18,7 @@ public class Main {
 		RetrieveData data = new RetrieveData();
 		data.getDataFromDB(conn.getConn());
 		data.manageData();
+		System.out.println(data.nodeConnectionsToString());
 		ShortestPath aPath = new ShortestPath();
 		System.out.printf("\n###############################################################\n");
 		System.out.printf("ALL PATH CALCULATION START\n");

@@ -35,234 +35,113 @@ public class RetrieveData {
 		int currentStart = 0, currentEnd = 0;
 		int old = -1;
 		Road currentRoad;
-		boolean check = false;
-		double[] connectionsData; 
+		boolean contained = false;
+		data.Connection connectionsData; 
 		NodeConnections aConn;
-
-		NodeConnections inverseConn;
 		Vector<Integer> nodeChecked = new Vector<Integer>();
 		System.out.println("Number of node to check is: "+roads.size());
-		for(int i = 0; i < roads.size()-19000; i++){
-			System.out.println();
-			System.out.printf("Iteration nr: %d\n", i);
+		
+		//reading all the nodes in the query result
+		for(int i = 0; i < roads.size(); i++){
+			System.out.printf("Iteration nr: %d \n", i);
 			currentRoad = roads.get(i);
-			connectionsData = new double[3];
 			
+			//setting the current start and end nodes
 			currentStart = currentRoad.getStartNode();
 			currentEnd = currentRoad.getEndNode();
+			System.out.println("Current start node: " + currentStart);
+			System.out.println("Current end node: " + currentEnd);
 			
-			nodeChecked.add(currentStart);
+			//checking if the current start node has already been met
+			if(!nodeChecked.contains(currentStart)){
 			
-			//Checking if the node 'currentEnd' is already visited or not
-			if (nodeChecked.contains(currentEnd))
-			{
-				check = true;
-				System.out.printf("Same node\n");
-			}
-			
-			System.out.printf("CurrentStart %d\n", currentStart);
-			System.out.printf("currentEnd %d\n", currentEnd);
-			System.out.println("The number of node checked is: "+nodeChecked.size()+"/"+roads.size());
-			System.out.printf("Record: %d, %d, %d, %f \n", currentRoad.edgeId, currentRoad.getStartNode(), currentRoad.getEndNode(), currentRoad.getDistance());
-//			if (currentStart == old || currentEnd == old) {
-//				check = true;
-//				System.out.printf("Same node\n");
-//			}
-			if (check) {
-				System.out.printf("IF entered.\n");	
+				//adding the start as already met			
+				nodeChecked.add(currentStart);
 				
-//				connectionsData = new double[3];
-				aConn = allConnections[currentRoad.endNodeId];
-				aConn.setConnection(endNodeConnection(currentRoad));
-				System.out.printf("StartNodeId: %d\n", currentRoad.startNodeId);
-				System.out.println("Connections: "+aConn.getConnections().size());
-				allConnections[currentRoad.endNodeId] = aConn;
-				
-				
-				
-				
-				
-				/*while (Array.getDouble(allConnections[old+1].getConnections(indexMatrix), 0) != 0) {
-					indexMatrix++;
-				}			
-				System.out.printf("indexMatrix: %d\n", indexMatrix);*/
-
-				//currentStart == old
-//				if(currentStart == old){
-//					setStartEqualOld(data, connectionsData, aConn, currentStart);
-//					old = currentStart;					
-//					connectionsData = new double[3];
-//					inverseConn = new NodeConnections();
-//					
-//					if(allConnections[data.endNodeId] == null){
-//						connectionsData[0] = data.getEdgeId();
-//						connectionsData[1] = data.getStartNode();
-//						connectionsData[2] = data.getDistance();
-//						inverseConn.setConnection(connectionsData);
-//						inverseConn.setStartNodeId(currentEnd);
-//						allConnections[data.endNodeId] = inverseConn;
-//						System.out.printf("StartNodeId: %d\n", data.startNodeId);
-//						System.out.printf("Connections[%d][0]: %f\n", inverseConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 0));
-//						System.out.printf("Connections[%d][1]: %f\n", inverseConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 1));
-//						System.out.printf("Connections[%d][2]: %f\n", inverseConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 2));
-//					}
-//					else {
-//						inverseConn = allConnections[currentEnd];
-//						connectionsData[0] = data.getEdgeId();
-//						connectionsData[1] = data.getStartNode();
-//						connectionsData[2] = data.getDistance();
-//						inverseConn.setConnection(connectionsData);
-//						System.out.printf("StartNodeId: %d\n", data.startNodeId);
-//						System.out.printf("Connections[%d][0]: %f\n", inverseConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 0));
-//						System.out.printf("Connections[%d][1]: %f\n", inverseConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 1));
-//						System.out.printf("Connections[%d][2]: %f\n", inverseConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 2));
-//					}
-//				}
-//
-//				//currentEnd == old
-//				else if(currentEnd == old){
-//					
-//					//setting the connection based on the end node
-//					System.out.printf("CurrentEnd IF entered.\n");
-//					aConn = allConnections[currentEnd];
-//					connectionsData[0] = data.getEdgeId();
-//					connectionsData[1] = data.getStartNode();
-//					connectionsData[2] = data.getDistance();
-//					aConn.setConnection(connectionsData);
-////					aConn.setStartNodeId(currentEnd);
-////					allConnections[data.endNodeId] = aConn;
-//					System.out.printf("StartNodeId: %d\n", data.startNodeId);
-//					System.out.printf("Connections[%d][0]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 0));
-//					System.out.printf("Connections[%d][1]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 1));
-//					System.out.printf("Connections[%d][2]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 2));					
-////					while (Array.getDouble(allConnections[old].getConnections(indexMatrix), 1) != 0) {
-////						indexMatrix++;
-////					}	
-//					
-//					//setting the connection of the same edge based on the start node
-//					aConn = new NodeConnections();
-//					aConn = allConnections[currentStart];
-//					connectionsData[0] = data.getEdgeId();
-//					connectionsData[1] = data.getEndNode();
-//					connectionsData[2] = data.getDistance();
-//					aConn.setConnection(connectionsData);
-////					aConn.setStartNodeId(currentEnd);
-////					allConnections[data.endNodeId] = aConn;
-//					System.out.printf("StartNodeId: %d\n", data.startNodeId);
-//					System.out.printf("Connections[%d][0]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 0));
-//					System.out.printf("Connections[%d][1]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 1));
-//					System.out.printf("Connections[%d][2]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 2));
-//					old = currentEnd;
-//				}
-
-			} 
-				
-				//first connection found for a given node				
-
-				//adding the same connections to the list of the current end node
-//				connectionsData = new double[3];
+				//setting the connections for the new node
 				aConn = new NodeConnections();
-				aConn.setConnection(startNodeConnection(currentRoad));
-				System.out.printf("StartNodeId: %d\n", currentRoad.startNodeId);
-				System.out.println("Connections: "+aConn.getConnections().size());
-				allConnections[currentRoad.startNodeId] = aConn;
-					
-//				if(nodeChecked.contains(data.getEndNode())){
-//					connectionsData[0] = data.getEdgeId();
-//					connectionsData[1] = data.getStartNode();
-//					connectionsData[2] = data.getDistance();
-//					aConn.setConnection(connectionsData);
-//					aConn.setStartNodeId(currentEnd);
-//					allConnections[data.endNodeId] = aConn;
-//					System.out.printf("StartNodeId: %d\n", data.endNodeId);
-//					System.out.printf("Connections[%d][0]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 0));
-//					System.out.printf("Connections[%d][1]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 1));
-//					System.out.printf("Connections[%d][2]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 2));
-//				}
-//				else {
-//					aConn = allConnections[currentEnd];
-//					connectionsData[0] = data.getEdgeId();
-//					connectionsData[1] = data.getStartNode();
-//					connectionsData[2] = data.getDistance();
-//					aConn.setConnection(connectionsData);
-//					System.out.printf("StartNodeId: %d\n", data.startNodeId);
-//					System.out.printf("Connections[%d][0]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 0));
-//					System.out.printf("Connections[%d][1]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 1));
-//					System.out.printf("Connections[%d][2]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 2));
-//				}		
-//				old = data.startNodeId;
-			
-			check = false;
-		}
-		System.out.println("AllConnections size: "+allConnections.length);
-		System.out.println("Node checked size: "+nodeChecked.size());
-		aConn = allConnections[0];
-		System.out.println("Nodo : "+aConn.getConnections().get(0).startNodeId);
-		//System.exit(0);
-		for (int j=0; j<allConnections.length;j++){
-			System.out.println("Ciclo for ESTERNO");
-			aConn = allConnections[nodeChecked.get(j)];
-			for (int h=0; h<aConn.getConnections().size(); h++){
-				System.out.println("Ciclo for INTERNO");
-				System.out.println("Nodo : "+aConn.getConnections().get(h).startNodeId+" size: "+aConn.getConnections().size());
+				aConn.setStartNodeId(currentStart);
+				
+				System.out.println("Current end has not met yet.");
+				
 			}
+			
+			//in case has not been met yet
+			else {
+				
+				//getting the already existing connection (start node)
+				aConn = allConnections[currentStart];
+				
+				System.out.println("Current end already met. Old connections retrieved.");
+	
+			}
+				
+			//setting the connection (start node)
+			connectionsData = new data.Connection(currentRoad.getEdgeId(), currentEnd, currentRoad.getDistance());
+			aConn.setConnection(connectionsData);
+			allConnections[currentStart] = aConn;
+			
+			System.out.println("Connection set (start).");
+			
+			//the same thing for the current end
+			if(!nodeChecked.contains(currentEnd)){
+				
+				//adding the end as already met
+				nodeChecked.add(currentEnd);
+				
+				//setting the connections for the new node
+				aConn = new NodeConnections();
+				aConn.setStartNodeId(currentEnd);
+				
+				System.out.println("Current start has not met yet.");
+				
+			}
+			
+			else {
+				
+				//getting the already existing connection (end node)
+				aConn = allConnections[currentEnd];
+				
+				System.out.println("Current start already met. Old connections retrieved.");
+				
+			}
+			
+			//setting the connection (end node)
+			connectionsData = new data.Connection(currentRoad.getEdgeId(), currentStart, currentRoad.getDistance());
+			aConn.setConnection(connectionsData);
+			allConnections[currentEnd] = aConn;
+			
+			System.out.println("Connection set (start).");
+			
+			aConn = null;
+			connectionsData = null;
+			
+			System.out.println("----> DONE!");
 		}
 	}
 	
-	public Road startNodeConnection(Road data) {
-		System.out.printf("Else entered.\n");
-		Road tmpRoad = new Road();
-		tmpRoad.startNodeId = data.getStartNode();
-		tmpRoad.edgeId = data.getEdgeId();
-		tmpRoad.endNodeId = data.getEndNode(); 
-		tmpRoad.distance = data.getDistance();
-		
-		return tmpRoad;
-//		connectionsData[0] = data.getEdgeId();
-//		connectionsData[1] = data.getEndNode();
-//		connectionsData[2] = data.getDistance();
-//		aConn.setConnection(connectionsData);
-//		aConn.setStartNodeId(currentStart);
-//		allConnections[currentStart] = aConn;
-			
-	}
-	
-	public Road endNodeConnection(Road data) {
-		System.out.printf("Else entered.\n");
-		Road tmpRoad = new Road();
-		tmpRoad.startNodeId = data.getEndNode();
-		tmpRoad.edgeId = data.getEdgeId();
-		tmpRoad.endNodeId = data.getStartNode();
-		tmpRoad.distance = data.getDistance();
-		
-		return tmpRoad;
-//		connectionsData[0] = data.getEdgeId();
-//		connectionsData[1] = data.getEndNode();
-//		connectionsData[2] = data.getDistance();
-//		aConn.setConnection(connectionsData);
-//		aConn.setStartNodeId(currentStart);
-//		allConnections[currentStart] = aConn;
-			
-	}
-	
-	public void setStartEqualOld(Road data, double[] connectionsData, NodeConnections aConn, int currentStart){
-		System.out.printf("CurrentStart IF entered.\n");
-		aConn = allConnections[currentStart];
-		connectionsData[0] = data.getEdgeId();
-		connectionsData[1] = data.getEndNode();
-		connectionsData[2] = data.getDistance();
-//		aConn.setConnection(connectionsData);
-//		aConn.setStartNodeId(currentStart);
-//		allConnections[data.startNodeId] = aConn;
-		System.out.printf("StartNodeId: %d\n", data.startNodeId);
-		System.out.printf("Connections[%d][0]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 0));
-		System.out.printf("Connections[%d][1]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 1));
-		System.out.printf("Connections[%d][2]: %f\n", aConn.getConnections().size()-1, Array.getDouble(aConn.getConnections().lastElement(), 2));
-	}
+
 	
 	
 	
 	public NodeConnections[] getAllConnections(){
 		return this.allConnections;
+	}
+	
+	public String nodeConnectionsToString(){
+		String res = "";
+		for(int i = 0; i < allConnections.length; i++){
+			NodeConnections aConn = allConnections[i];
+			res = "Connections for node " + aConn.getStartNodeId() + ": (edge, end, distance)\n\t";
+			for(int j = 0; j < aConn.getConnections().size(); j++)
+			res += "Connection nr." + j + ": " + aConn.getConnections().get(j).getEdge() + ", "
+					+ aConn.getConnections().get(j).getEnd() + ", " +
+					+ aConn.getConnections().get(j).getDistance() + ", "
+					+ "\n\t";
+			System.out.println(res);
+			System.out.println();
+		}
+		
+		return res;
 	}
 }

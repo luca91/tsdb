@@ -6,7 +6,7 @@ public class NodeConnections {
 	
 	private int startNodeId;
 	//Vector<double[]> connections = new Vector<double[]>(1,1);
-	Vector<Road> connections = new Vector<Road>();
+	Vector<Connection> connections = new Vector<Connection>();
 
 //	public double[] getConnectionAt(int indexMatrix) {
 //		return connections.get(indexMatrix);
@@ -16,11 +16,11 @@ public class NodeConnections {
 		this.startNodeId = id;
 	}
 	
-	public void setConnection(Road toSet){
+	public void setConnection(Connection toSet){
 		connections.add(toSet);
 	}
 	
-	public Vector<Road> getConnections(){
+	public Vector<Connection> getConnections(){
 		return connections;
 	}
 	

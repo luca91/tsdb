@@ -98,32 +98,32 @@ public class ShortestPath {
 			
 			//set the distance of the current node's siblings
 			for(int i = 0; i < conn.getConnections().size(); i++){
-				System.out.println("Number of siblings:" + conn.getConnections().size());
-				double dist = totalCost + Array.getDouble(conn.getConnectionAt(i), 2);
-				System.out.println("Distance to sibling "+ (int) Array.getDouble(conn.getConnectionAt(i), 1) + ": " + dist);
-				Node sibling = new Node(dist,
-									current,
-									(int) Array.getDouble(conn.getConnectionAt(i), 1));
-				
-				if(visited.contains(sibling))
-					continue;
-				
-				//if the sibling is already in the queue is removed and reinserted to update the distance
-				if(q.contains(sibling))
-					q.remove(sibling);
-					
-				if(dist < distances[(int) Array.getDouble(conn.getConnectionAt(i), 1)]){
-					distances[(int) Array.getDouble(conn.getConnectionAt(i), 1)] = dist;
-					previous[(int) Array.getDouble(conn.getConnectionAt(i), 1)] = current;
-				}
-				else
-					dist = distances[(int) Array.getDouble(conn.getConnectionAt(i), 1)];
-				
-				//setting the updated sibling and inserting it to the queue
-				sibling.setTotalCost(dist);
-				if(!visited.contains(sibling) && previous[n.getID()] != sibling.getID())
-					q.add(sibling);
-				System.out.println("New Distance to sibling "+ (int) Array.getDouble(conn.getConnectionAt(i), 1) + ": " + dist);
+//				System.out.println("Number of siblings: " + conn.getConnections().size());
+//				double dist = totalCost + Array.getDouble(conn.getConnectionAt(i), 2);
+//				System.out.println("Distance to sibling "+ (int) Array.getDouble(conn.getConnectionAt(i), 1) + ": " + dist);
+//				Node sibling = new Node(dist,
+//									current,
+//									(int) Array.getDouble(conn.getConnectionAt(i), 1));
+//				
+//				if(visited.contains(sibling))
+//					continue;
+//				
+//				//if the sibling is already in the queue is removed and reinserted to update the distance
+//				if(q.contains(sibling))
+//					q.remove(sibling);
+//					
+//				if(dist < distances[(int) Array.getDouble(conn.getConnectionAt(i), 1)]){
+//					distances[(int) Array.getDouble(conn.getConnectionAt(i), 1)] = dist;
+//					previous[(int) Array.getDouble(conn.getConnectionAt(i), 1)] = current;
+//				}
+//				else
+//					dist = distances[(int) Array.getDouble(conn.getConnectionAt(i), 1)];
+//				
+//				//setting the updated sibling and inserting it to the queue
+//				sibling.setTotalCost(dist);
+//				if(!visited.contains(sibling) && previous[n.getID()] != sibling.getID())
+//					q.add(sibling);
+//				System.out.println("New Distance to sibling "+ (int) Array.getDouble(conn.getConnectionAt(i), 1) + ": " + dist);
 			}
 			
 			//adding the path to the list
