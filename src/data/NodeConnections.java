@@ -5,12 +5,11 @@ import java.util.Vector;
 public class NodeConnections {
 	
 	private int startNodeId;
-	//Vector<double[]> connections = new Vector<double[]>(1,1);
 	Vector<Connection> connections = new Vector<Connection>();
 
-//	public double[] getConnectionAt(int indexMatrix) {
-//		return connections.get(indexMatrix);
-//	}
+	public Connection getConnectionAt(int indexMatrix) {
+		return connections.get(indexMatrix);
+	}
 	
 	public void setStartNodeId(int id){
 		this.startNodeId = id;

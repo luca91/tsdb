@@ -1,6 +1,5 @@
 package data;
 
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +9,7 @@ import java.util.Vector;
 public class RetrieveData {
 
 	Vector<Road> roads = new Vector<Road>();
-	private NodeConnections[] allConnections;
+ 	private NodeConnections[] allConnections;
 	
 	
 	public RetrieveData() {
@@ -30,12 +29,10 @@ public class RetrieveData {
 	        	System.out.println(e);
 	        	}
 	}
-	
+
 	public void manageData(){
 		int currentStart = 0, currentEnd = 0;
-		int old = -1;
 		Road currentRoad;
-		boolean contained = false;
 		data.Connection connectionsData; 
 		NodeConnections aConn;
 		Vector<Integer> nodeChecked = new Vector<Integer>();
@@ -62,7 +59,7 @@ public class RetrieveData {
 				aConn = new NodeConnections();
 				aConn.setStartNodeId(currentStart);
 				
-				System.out.println("Current end has not met yet.");
+				System.out.println("Current Start has not met yet.");
 				
 			}
 			
@@ -72,7 +69,7 @@ public class RetrieveData {
 				//getting the already existing connection (start node)
 				aConn = allConnections[currentStart];
 				
-				System.out.println("Current end already met. Old connections retrieved.");
+				System.out.println("Current start already met. Old connections retrieved.");
 	
 			}
 				
@@ -93,7 +90,7 @@ public class RetrieveData {
 				aConn = new NodeConnections();
 				aConn.setStartNodeId(currentEnd);
 				
-				System.out.println("Current start has not met yet.");
+				System.out.println("Current end has not met yet.");
 				
 			}
 			
@@ -102,7 +99,7 @@ public class RetrieveData {
 				//getting the already existing connection (end node)
 				aConn = allConnections[currentEnd];
 				
-				System.out.println("Current start already met. Old connections retrieved.");
+				System.out.println("Current end already met. Old connections retrieved.");
 				
 			}
 			
@@ -111,7 +108,7 @@ public class RetrieveData {
 			aConn.setConnection(connectionsData);
 			allConnections[currentEnd] = aConn;
 			
-			System.out.println("Connection set (start).");
+			System.out.println("Connection set (end).");
 			
 			aConn = null;
 			connectionsData = null;

@@ -1,13 +1,12 @@
 package data;
 
-import java.lang.reflect.Array;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Vector;
-
-import data.NodeConnections;
 
 public class ShortestPath {
 	
@@ -25,8 +24,11 @@ public class ShortestPath {
 		return false;
 	}
 		
-	public Vector<Integer> calculatePath(NodeConnections[] connections, int source, int destination){
+	public Vector<Integer> calculatePath(NodeConnections[] connections, int source, int destination, String fileName) throws IOException{
 		
+		//the file where to save the path
+		File aFile = new File(fileName);
+		FileWriter fw = new FileWriter(aFile);
 		
 		System.out.println("##########################");
 				
@@ -34,7 +36,7 @@ public class ShortestPath {
 		Vector<Integer> resultingPath = new Vector<Integer>();
 		
 		//visited nodes
-		Vector<Node> visited = new Vector<Node>(1,1);
+		Vector<Integer> visited = new Vector<Integer>(1,1);
 		
 		//the queue with the nodes to visit, sorted by distances from the actual node
 		PriorityQueue<Node> q = new PriorityQueue<Node>(1, new Comparator<Node>() {
@@ -51,23 +53,27 @@ public class ShortestPath {
 		
 		//the instance containing the info of the current selected node
 		Node n = null;
-		double totalCost = 0;
+		double totalCost = INFINITY;
 		int prev = source;
 		int current = source;
 		
 		//adding source to the queue
-		n = new Node(totalCost, prev, source);
+		n = new Node(0, prev, source);
 		q.add(n);
+		
+		for(int i = 0; i < 21048; i++){
+			if(i != source){
+				n = new Node(totalCost, -1, i);
+				q.add(n);
+			}
+		}
 		
 		System.out.println("Source: " + source);
 		System.out.println("Destination: " + destination);
 		
-		//adding the current selected node to the visited nodes
-		visited.add(n);
-		
 		//all distances from the current source
 		double[] distances = new double[ARRAY_LENGTH];
-		double[] previous = new double[ARRAY_LENGTH];
+		int[] previous = new int[ARRAY_LENGTH];
 		
 		//set all the distances to infinity
 		for(int i = 0; i < ARRAY_LENGTH; i++){
@@ -81,13 +87,20 @@ public class ShortestPath {
 		distances[source] = 0;
 		System.out.println("Source distance set to 0.");
 		
-		while(current != destination && !q.isEmpty()){
+		totalCost = 0;
+		int count = 0;
+		
+		while(!q.isEmpty() && count < ARRAY_LENGTH){
 			
 			//extracting the next current node
 			n = q.poll();
-			visited.add(n);
+			visited.add(n.getID());
 			current = n.getID();
-			System.out.println("Next node: " + current);	
+			if(current == destination){
+				break;
+			}
+			
+			System.out.println("Current node (removed): " + current);	
 						
 			//source and destination (to remember)
 			System.out.println("Source: " + source);
@@ -98,38 +111,68 @@ public class ShortestPath {
 			
 			//set the distance of the current node's siblings
 			for(int i = 0; i < conn.getConnections().size(); i++){
-//				System.out.println("Number of siblings: " + conn.getConnections().size());
-//				double dist = totalCost + Array.getDouble(conn.getConnectionAt(i), 2);
-//				System.out.println("Distance to sibling "+ (int) Array.getDouble(conn.getConnectionAt(i), 1) + ": " + dist);
-//				Node sibling = new Node(dist,
-//									current,
-//									(int) Array.getDouble(conn.getConnectionAt(i), 1));
-//				
-//				if(visited.contains(sibling))
-//					continue;
-//				
-//				//if the sibling is already in the queue is removed and reinserted to update the distance
-//				if(q.contains(sibling))
-//					q.remove(sibling);
-//					
-//				if(dist < distances[(int) Array.getDouble(conn.getConnectionAt(i), 1)]){
-//					distances[(int) Array.getDouble(conn.getConnectionAt(i), 1)] = dist;
-//					previous[(int) Array.getDouble(conn.getConnectionAt(i), 1)] = current;
-//				}
-//				else
-//					dist = distances[(int) Array.getDouble(conn.getConnectionAt(i), 1)];
-//				
-//				//setting the updated sibling and inserting it to the queue
-//				sibling.setTotalCost(dist);
-//				if(!visited.contains(sibling) && previous[n.getID()] != sibling.getID())
-//					q.add(sibling);
-//				System.out.println("New Distance to sibling "+ (int) Array.getDouble(conn.getConnectionAt(i), 1) + ": " + dist);
+				if(!visited.contains(conn.getConnectionAt(i).getEnd())){
+					System.out.println("Number of siblings: " + conn.getConnections().size());
+					System.out.println("Sibling nr. " + i);
+					double dist = totalCost +conn.getConnectionAt(i).getDistance();
+					System.out.println("Distance to sibling "+ (int) conn.getConnectionAt(i).getEnd() + ": " + dist);
+					Node sibling = new Node(dist,
+										current,
+										(int) conn.getConnectionAt(i).getEnd());
+					
+					//updating the distance of the sibling
+					if(dist < distances[(int) conn.getConnectionAt(i).getEnd()]){
+						distances[(int) conn.getConnectionAt(i).getEnd()] = dist;
+						previous[(int) conn.getConnectionAt(i).getEnd()] = current;
+						System.out.println("Previous node of " + (int) conn.getConnectionAt(i).getEnd() + " is " + current);
+					}
+					else {
+						dist = distances[(int) conn.getConnectionAt(i).getEnd()];
+						System.out.println("Previous node of " + (int) conn.getConnectionAt(i).getEnd() + " is " + previous[(int) conn.getConnectionAt(i).getEnd()]);
+					}
+					
+					System.out.println("Visited contains the sibling: " + visited.contains(sibling));
+					
+					//if the sibling have been remove, that is it has been not visited yet, then it is added with the update distance
+					sibling.setTotalCost(dist);
+					if(q.contains(sibling)){
+						q.remove(q);
+						q.add(sibling);
+					}
+					else{
+						q.add(sibling);
+					}
+					
+					System.out.println("New Distance to sibling "+ (int) conn.getConnectionAt(i).getEnd() + ": " + sibling.getTotalCost());
+				}
+				else
+					continue;
 			}
 			
 			//adding the path to the list
 			resultingPath.add(n.getID());
+			System.out.println("Node select as next: " + q.peek().getID());
 			System.out.println("##########################");
+			count++;
 		}
+		
+		System.out.println("Visited nodes: " + visited.size());
+		
+		int cur = destination;
+		System.out.println("Finding the path...");		
+		
+		//building the final path
+		while(cur != source){
+
+			//adding the path to the list
+			System.out.println("Current: " + cur);
+			resultingPath.add((int) cur);
+			fw.append(String.valueOf(cur)+"\n");	
+			fw.flush();
+			cur = (int) previous[cur];
+		}
+		fw.close();
+		System.out.println("Path founded!");
 		
 		pathAlreadyDone.add(resultingPath.toArray(new Integer[resultingPath.size()]));
 		System.out.println("##########################\n");
@@ -152,11 +195,4 @@ public class ShortestPath {
 		}
 		System.out.printf("END\n\n");
 	}
-	
-	public PriorityQueue<Node> updateQueue(PriorityQueue<Node> q, Node n){
-		q.remove(n);
-		q.add(n);
-		return q;
-	}
-
 }

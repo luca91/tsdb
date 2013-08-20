@@ -1,11 +1,14 @@
-package data;
+package main;
 
-import java.util.Random;
 import java.util.Vector;
+
+import data.DBConnection;
+import data.RetrieveData;
+import data.ShortestPath;
 
 public class Main {
 	
-	static Vector<Vector<Integer>> allPath = new Vector<Vector<Integer>>();
+//	static Vector<Vector<Integer>> allPath = new Vector<Vector<Integer>>();
 
 	/**
 	 * @param args
@@ -28,12 +31,12 @@ public class Main {
 			System.out.printf("ITERATION NR. %d\n", i);
 			System.out.printf("##########################\n");
 			int source = -1, destination = -1;
-			do {
-				source = aPath.generateRandomNumbers();
-				destination = aPath.generateRandomNumbers();
-				allPath.add(aPath.calculatePath(data.getAllConnections(), source, destination));
-			}
-			while(!aPath.checkNodes(source, destination));
+			source = aPath.generateRandomNumbers();
+			destination = aPath.generateRandomNumbers();
+			if(!aPath.checkNodes(source, destination))
+//				allPath.add(aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt"));
+				aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt");
+			System.gc();
 		}
 		System.out.println();
 		System.out.println();
