@@ -23,7 +23,7 @@ public class RetrieveData {
 	            while (rs.next()){
 	            	Road aRoad = new Road(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getDouble(4));
 	            	roads.add(aRoad);
-	            	aRoad.printRoad();
+//	            	aRoad.printRoad();
 	            }
 	        } catch (SQLException e) {
 	        	System.out.println(e);
@@ -36,18 +36,18 @@ public class RetrieveData {
 		data.Connection connectionsData; 
 		NodeConnections aConn;
 		Vector<Integer> nodeChecked = new Vector<Integer>();
-		System.out.println("Number of node to check is: "+roads.size());
+//		System.out.println("Number of node to check is: "+roads.size());
 		
 		//reading all the nodes in the query result
 		for(int i = 0; i < roads.size(); i++){
-			System.out.printf("Iteration nr: %d \n", i);
+//			System.out.printf("Iteration nr: %d \n", i);
 			currentRoad = roads.get(i);
 			
 			//setting the current start and end nodes
 			currentStart = currentRoad.getStartNode();
 			currentEnd = currentRoad.getEndNode();
-			System.out.println("Current start node: " + currentStart);
-			System.out.println("Current end node: " + currentEnd);
+//			System.out.println("Current start node: " + currentStart);
+//			System.out.println("Current end node: " + currentEnd);
 			
 			//checking if the current start node has already been met
 			if(!nodeChecked.contains(currentStart)){
@@ -59,7 +59,7 @@ public class RetrieveData {
 				aConn = new NodeConnections();
 				aConn.setStartNodeId(currentStart);
 				
-				System.out.println("Current Start has not met yet.");
+//				System.out.println("Current Start has not met yet.");
 				
 			}
 			
@@ -69,7 +69,7 @@ public class RetrieveData {
 				//getting the already existing connection (start node)
 				aConn = allConnections[currentStart];
 				
-				System.out.println("Current start already met. Old connections retrieved.");
+//				System.out.println("Current start already met. Old connections retrieved.");
 	
 			}
 				
@@ -78,7 +78,7 @@ public class RetrieveData {
 			aConn.setConnection(connectionsData);
 			allConnections[currentStart] = aConn;
 			
-			System.out.println("Connection set (start).");
+//			System.out.println("Connection set (start).");
 			
 			//the same thing for the current end
 			if(!nodeChecked.contains(currentEnd)){
@@ -90,7 +90,7 @@ public class RetrieveData {
 				aConn = new NodeConnections();
 				aConn.setStartNodeId(currentEnd);
 				
-				System.out.println("Current end has not met yet.");
+//				System.out.println("Current end has not met yet.");
 				
 			}
 			
@@ -99,7 +99,7 @@ public class RetrieveData {
 				//getting the already existing connection (end node)
 				aConn = allConnections[currentEnd];
 				
-				System.out.println("Current end already met. Old connections retrieved.");
+//				System.out.println("Current end already met. Old connections retrieved.");
 				
 			}
 			
@@ -108,12 +108,12 @@ public class RetrieveData {
 			aConn.setConnection(connectionsData);
 			allConnections[currentEnd] = aConn;
 			
-			System.out.println("Connection set (end).");
+//			System.out.println("Connection set (end).");
 			
 			aConn = null;
 			connectionsData = null;
 			
-			System.out.println("----> DONE!");
+//			System.out.println("----> DONE!");
 		}
 	}
 	
@@ -142,8 +142,8 @@ public class RetrieveData {
 						+ aConn.getConnections().get(j).getEnd() + ", " +
 						+ aConn.getConnections().get(j).getDistance() + ", "
 						+ "\n\t";
-				System.out.println(res);
-				System.out.println();
+//				System.out.println(res);
+//				System.out.println();
 			}
 		}
 		

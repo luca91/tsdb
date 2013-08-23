@@ -22,15 +22,16 @@ public class Main {
 		RetrieveData data = new RetrieveData();
 		data.getDataFromDB(conn.getConn());
 		data.manageData();
-		System.out.println(data.nodeConnectionsToString());
+//		System.out.println(data.nodeConnectionsToString());
 		ShortestPath aPath = new ShortestPath();
 		System.out.printf("\n###############################################################\n");
 		System.out.printf("ALL PATH CALCULATION START\n");
 		System.out.printf("###############################################################\n\n");
+		System.out.println("Searching for paths...");
 		for (int i = 0; i < 7033; i++){
-			System.out.printf("##########################\n");
-			System.out.printf("ITERATION NR. %d\n", i);
-			System.out.printf("##########################\n");
+//			System.out.printf("##########################\n");
+//			System.out.printf("ITERATION NR. %d\n", i);
+//			System.out.printf("##########################\n");
 			
 //			source = aPath.generateRandomNumbers();
 //			destination = aPath.generateRandomNumbers();
@@ -41,8 +42,8 @@ public class Main {
 			} while (destination == -1 || source == -1);
 			if(!aPath.checkNodes(source, destination))
 //				allPath.add(aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt"));
-				//aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt");
-				aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\Simone\\Dropbox\\paths\\path_nr_"+i);
+				aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt");
+//				aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\Simone\\Dropbox\\paths\\path_nr_"+i);
 			System.gc();
 		}
 		System.out.println();

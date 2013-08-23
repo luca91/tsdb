@@ -160,12 +160,12 @@ public class ShortestPath {
 			count++;
 		}
 		
-		System.out.println("Visited nodes: " + visited.size());
+//		System.out.println("Visited nodes: " + visited.size());
 		
 		int cur = destination;
-		System.out.println("Current Dest: "+cur+"\n");
-
-		System.out.println("Finding the path...");		
+//		System.out.println("Current Dest: "+cur+"\n");
+//
+//		System.out.println("Finding the path...");		
 		
 		//building the final path
 		while(cur != source){
@@ -174,8 +174,8 @@ public class ShortestPath {
 				resultingPath.add((int) cur);
 				fw.append(String.valueOf(cur)+"\n");	
 				fw.flush();
-				System.out.println("Current: "+cur+"\n");
-				System.out.println("Previous: "+previous[cur]+"\n");
+//				System.out.println("Current: "+cur+"\n");
+//				System.out.println("Previous: "+previous[cur]+"\n");
 				if (previous[cur] == -1)
 					break;
 				cur = (int) previous[cur];
@@ -189,7 +189,7 @@ public class ShortestPath {
 //		fwPath.close();
 		fw.close();
 		resultingPath.clear();
-		System.out.println("Path founded!");
+//		System.out.println("Path founded!");
 		
 		pathAlreadyDone.add(resultingPath.toArray(new Integer[resultingPath.size()]));
 //		System.out.println("##########################\n");
@@ -200,7 +200,7 @@ public class ShortestPath {
 	public int generateRandomNumbers(){
 		Random rm = new Random();
 		int number = rm.nextInt(ARRAY_LENGTH);
-		System.out.printf("Random number: %d\n", number);
+//		System.out.printf("Random number: %d\n", number);
 		return number;		
 	}
 	
