@@ -10,8 +10,8 @@ import java.util.Vector;
 
 public class ShortestPath {
 	
-	public static final double INFINITY = 999.0;
-	public static final int ARRAY_LENGTH = 21048;
+	public static final double INFINITY = 9999.0;
+	public static final int ARRAY_LENGTH = 7034;
 	private Vector<Integer[]> pathAlreadyDone = new Vector<Integer[]>(1,1);
 	
 
@@ -24,13 +24,15 @@ public class ShortestPath {
 		return false;
 	}
 		
-	public Vector<Integer> calculatePath(NodeConnections[] connections, int source, int destination, String fileName) throws IOException{
+	public void calculatePath(NodeConnections[] connections, int source, int destination, String fileName) throws IOException{
 		
 		//the file where to save the path
-		File aFile = new File(fileName);
+		File aFile = new File(fileName+".txt");
 		FileWriter fw = new FileWriter(aFile);
+//		File filePath = new File(fileName);
+//		FileWriter fwPath = new FileWriter(filePath+"_resultingPath.txt");
 		
-		System.out.println("##########################");
+//		System.out.println("##########################");
 				
 		//resulting path
 		Vector<Integer> resultingPath = new Vector<Integer>();
@@ -61,15 +63,15 @@ public class ShortestPath {
 		n = new Node(0, prev, source);
 		q.add(n);
 		
-		for(int i = 0; i < 21048; i++){
+		for(int i = 0; i < ARRAY_LENGTH; i++){
 			if(i != source){
 				n = new Node(totalCost, -1, i);
 				q.add(n);
 			}
 		}
 		
-		System.out.println("Source: " + source);
-		System.out.println("Destination: " + destination);
+//		System.out.println("Source: " + source);
+//		System.out.println("Destination: " + destination);
 		
 		//all distances from the current source
 		double[] distances = new double[ARRAY_LENGTH];
@@ -80,12 +82,12 @@ public class ShortestPath {
 			distances[i] = INFINITY;
 			previous[i] = -1;
 		}
-		System.out.println("All distances to infinity.");
-		System.out.println("All previous to -1.");
+//		System.out.println("All distances to infinity.");
+//		System.out.println("All previous to -1.");
 		
 		//distance of the source set to 0
 		distances[source] = 0;
-		System.out.println("Source distance set to 0.");
+//		System.out.println("Source distance set to 0.");
 		
 		totalCost = 0;
 		int count = 0;
@@ -100,22 +102,24 @@ public class ShortestPath {
 				break;
 			}
 			
-			System.out.println("Current node (removed): " + current);	
+//			System.out.println("Current node (removed): " + current);	
 						
 			//source and destination (to remember)
-			System.out.println("Source: " + source);
-			System.out.println("Destination: " + destination);
+//			System.out.println("Source: " + source);
+//			System.out.println("Destination: " + destination);
 			
 			//the connections for the current node
 			NodeConnections conn = connections[current];
-			
+			if(conn == null)
+				break;
+
 			//set the distance of the current node's siblings
 			for(int i = 0; i < conn.getConnections().size(); i++){
 				if(!visited.contains(conn.getConnectionAt(i).getEnd())){
-					System.out.println("Number of siblings: " + conn.getConnections().size());
-					System.out.println("Sibling nr. " + i);
+//					System.out.println("Number of siblings: " + conn.getConnections().size());
+//					System.out.println("Sibling nr. " + i);
 					double dist = totalCost +conn.getConnectionAt(i).getDistance();
-					System.out.println("Distance to sibling "+ (int) conn.getConnectionAt(i).getEnd() + ": " + dist);
+//					System.out.println("Distance to sibling "+ (int) conn.getConnectionAt(i).getEnd() + ": " + dist);
 					Node sibling = new Node(dist,
 										current,
 										(int) conn.getConnectionAt(i).getEnd());
@@ -124,14 +128,14 @@ public class ShortestPath {
 					if(dist < distances[(int) conn.getConnectionAt(i).getEnd()]){
 						distances[(int) conn.getConnectionAt(i).getEnd()] = dist;
 						previous[(int) conn.getConnectionAt(i).getEnd()] = current;
-						System.out.println("Previous node of " + (int) conn.getConnectionAt(i).getEnd() + " is " + current);
+//						System.out.println("Previous node of " + (int) conn.getConnectionAt(i).getEnd() + " is " + current);
 					}
 					else {
 						dist = distances[(int) conn.getConnectionAt(i).getEnd()];
-						System.out.println("Previous node of " + (int) conn.getConnectionAt(i).getEnd() + " is " + previous[(int) conn.getConnectionAt(i).getEnd()]);
+//						System.out.println("Previous node of " + (int) conn.getConnectionAt(i).getEnd() + " is " + previous[(int) conn.getConnectionAt(i).getEnd()]);
 					}
 					
-					System.out.println("Visited contains the sibling: " + visited.contains(sibling));
+//					System.out.println("Visited contains the sibling: " + visited.contains(sibling));
 					
 					//if the sibling have been remove, that is it has been not visited yet, then it is added with the update distance
 					sibling.setTotalCost(dist);
@@ -143,7 +147,7 @@ public class ShortestPath {
 						q.add(sibling);
 					}
 					
-					System.out.println("New Distance to sibling "+ (int) conn.getConnectionAt(i).getEnd() + ": " + sibling.getTotalCost());
+//					System.out.println("New Distance to sibling "+ (int) conn.getConnectionAt(i).getEnd() + ": " + sibling.getTotalCost());
 				}
 				else
 					continue;
@@ -151,38 +155,51 @@ public class ShortestPath {
 			
 			//adding the path to the list
 			resultingPath.add(n.getID());
-			System.out.println("Node select as next: " + q.peek().getID());
-			System.out.println("##########################");
+//			System.out.println("Node select as next: " + q.peek().getID());
+//			System.out.println("##########################");
 			count++;
 		}
 		
 		System.out.println("Visited nodes: " + visited.size());
 		
 		int cur = destination;
+		System.out.println("Current Dest: "+cur+"\n");
+
 		System.out.println("Finding the path...");		
 		
 		//building the final path
 		while(cur != source){
+				//adding the path to the list
+	//			System.out.println("Current: " + cur);
+				resultingPath.add((int) cur);
+				fw.append(String.valueOf(cur)+"\n");	
+				fw.flush();
+				System.out.println("Current: "+cur+"\n");
+				System.out.println("Previous: "+previous[cur]+"\n");
+				if (previous[cur] == -1)
+					break;
+				cur = (int) previous[cur];
 
-			//adding the path to the list
-			System.out.println("Current: " + cur);
-			resultingPath.add((int) cur);
-			fw.append(String.valueOf(cur)+"\n");	
-			fw.flush();
-			cur = (int) previous[cur];
+
 		}
+//		for (int i=0; i<resultingPath.size(); i++)
+//		{
+//			fwPath.write((resultingPath.toArray().toString()));
+//		}
+//		fwPath.close();
 		fw.close();
+		resultingPath.clear();
 		System.out.println("Path founded!");
 		
 		pathAlreadyDone.add(resultingPath.toArray(new Integer[resultingPath.size()]));
-		System.out.println("##########################\n");
+//		System.out.println("##########################\n");
 		
-		return resultingPath;		
+		//return resultingPath;		
 	}
 	
 	public int generateRandomNumbers(){
 		Random rm = new Random();
-		int number = rm.nextInt(21048);
+		int number = rm.nextInt(ARRAY_LENGTH);
 		System.out.printf("Random number: %d\n", number);
 		return number;		
 	}

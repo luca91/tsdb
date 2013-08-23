@@ -13,13 +13,13 @@ public class RetrieveData {
 	
 	
 	public RetrieveData() {
-		allConnections = new NodeConnections[21048];
+		allConnections = new NodeConnections[7034];
 	}
 	
 	public void getDataFromDB(Connection conn) {			
 	    	try {
 	    		Statement stmt = conn.createStatement();            
-	            ResultSet rs = stmt.executeQuery("SELECT * FROM roads");
+	            ResultSet rs = stmt.executeQuery("SELECT * FROM roadsOL");
 	            while (rs.next()){
 	            	Road aRoad = new Road(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getDouble(4));
 	            	roads.add(aRoad);
@@ -129,14 +129,22 @@ public class RetrieveData {
 		String res = "";
 		for(int i = 0; i < allConnections.length; i++){
 			NodeConnections aConn = allConnections[i];
-			res = "Connections for node " + aConn.getStartNodeId() + ": (edge, end, distance)\n\t";
-			for(int j = 0; j < aConn.getConnections().size(); j++)
-			res += "Connection nr." + j + ": " + aConn.getConnections().get(j).getEdge() + ", "
-					+ aConn.getConnections().get(j).getEnd() + ", " +
-					+ aConn.getConnections().get(j).getDistance() + ", "
-					+ "\n\t";
-			System.out.println(res);
-			System.out.println();
+			if (aConn != null)
+			{
+//				System.out.println(i+"\n");
+//				System.out.println(aConn+"\n");
+//				System.out.println(allConnections.length+"\n");
+	//			for (int h=0; h<allConnections.length; h++)
+					System.out.println(allConnections[i]+"\n");
+				res = "Connections for node " + aConn.getStartNodeId() + ": (edge, end, distance)\n\t";
+				for(int j = 0; j < aConn.getConnections().size(); j++)
+				res += "Connection nr." + j + ": " + aConn.getConnections().get(j).getEdge() + ", "
+						+ aConn.getConnections().get(j).getEnd() + ", " +
+						+ aConn.getConnections().get(j).getDistance() + ", "
+						+ "\n\t";
+				System.out.println(res);
+				System.out.println();
+			}
 		}
 		
 		return res;
