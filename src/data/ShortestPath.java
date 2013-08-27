@@ -11,7 +11,7 @@ import java.util.Vector;
 public class ShortestPath {
 	
 	public static final double INFINITY = 9999.0;
-	public static final int ARRAY_LENGTH = 7034;
+	public static final int ARRAY_LENGTH = 21048;
 	private Vector<Integer[]> pathAlreadyDone = new Vector<Integer[]>(1,1);
 	
 
@@ -26,9 +26,6 @@ public class ShortestPath {
 		
 	public void calculatePath(NodeConnections[] connections, int source, int destination, String fileName) throws IOException{
 		
-		//the file where to save the path
-		File aFile = new File(fileName+".txt");
-		FileWriter fw = new FileWriter(aFile);
 //		File filePath = new File(fileName);
 //		FileWriter fwPath = new FileWriter(filePath+"_resultingPath.txt");
 		
@@ -118,7 +115,7 @@ public class ShortestPath {
 				if(!visited.contains(conn.getConnectionAt(i).getEnd())){
 //					System.out.println("Number of siblings: " + conn.getConnections().size());
 //					System.out.println("Sibling nr. " + i);
-					double dist = totalCost +conn.getConnectionAt(i).getDistance();
+					double dist = n.getTotalCost() + conn.getConnectionAt(i).getDistance();
 //					System.out.println("Distance to sibling "+ (int) conn.getConnectionAt(i).getEnd() + ": " + dist);
 					Node sibling = new Node(dist,
 										current,
@@ -165,29 +162,34 @@ public class ShortestPath {
 		int cur = destination;
 //		System.out.println("Current Dest: "+cur+"\n");
 //
-//		System.out.println("Finding the path...");		
+//		System.out.println("Finding the path...");
 		
+			
+		//the file where to save the path
+		File aFile = new File(fileName+".txt");
+		FileWriter fw = new FileWriter(aFile);
+	
 		//building the final path
 		while(cur != source){
 				//adding the path to the list
 	//			System.out.println("Current: " + cur);
-				resultingPath.add((int) cur);
+//					resultingPath.add((int) cur);
 				fw.append(String.valueOf(cur)+"\n");	
-				fw.flush();
 //				System.out.println("Current: "+cur+"\n");
 //				System.out.println("Previous: "+previous[cur]+"\n");
 				if (previous[cur] == -1)
 					break;
 				cur = (int) previous[cur];
-
-
 		}
+		fw.append(String.valueOf(source));
+		fw.flush();
+		fw.close();
+		
 //		for (int i=0; i<resultingPath.size(); i++)
 //		{
 //			fwPath.write((resultingPath.toArray().toString()));
 //		}
 //		fwPath.close();
-		fw.close();
 		resultingPath.clear();
 //		System.out.println("Path founded!");
 		

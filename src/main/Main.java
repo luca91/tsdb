@@ -28,7 +28,7 @@ public class Main {
 		System.out.printf("ALL PATH CALCULATION START\n");
 		System.out.printf("###############################################################\n\n");
 		System.out.println("Searching for paths...");
-		for (int i = 0; i < 7033; i++){
+		for (int i = 0; i < 21048; i++){
 //			System.out.printf("##########################\n");
 //			System.out.printf("ITERATION NR. %d\n", i);
 //			System.out.printf("##########################\n");

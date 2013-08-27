@@ -13,13 +13,13 @@ public class RetrieveData {
 	
 	
 	public RetrieveData() {
-		allConnections = new NodeConnections[7034];
+		allConnections = new NodeConnections[21048];
 	}
 	
 	public void getDataFromDB(Connection conn) {			
 	    	try {
 	    		Statement stmt = conn.createStatement();            
-	            ResultSet rs = stmt.executeQuery("SELECT * FROM roadsOL");
+	            ResultSet rs = stmt.executeQuery("SELECT * FROM roads");
 	            while (rs.next()){
 	            	Road aRoad = new Road(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getDouble(4));
 	            	roads.add(aRoad);
