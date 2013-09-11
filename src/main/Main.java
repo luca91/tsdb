@@ -2,9 +2,9 @@ package main;
 
 import java.util.Vector;
 
-import data.DBConnection;
-import data.RetrieveData;
-import data.ShortestPath;
+import parser.RetrieveData;
+import database.DBConnection;
+import engine.ShortestPath;
 
 public class Main {
 	

@@ -1,4 +1,4 @@
-package data;
+package engine;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -7,6 +7,9 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Vector;
+
+import model.Node;
+import model.NodeConnections;
 
 public class ShortestPath {
 	
@@ -117,9 +120,10 @@ public class ShortestPath {
 //					System.out.println("Sibling nr. " + i);
 					double dist = n.getTotalCost() + conn.getConnectionAt(i).getDistance();
 //					System.out.println("Distance to sibling "+ (int) conn.getConnectionAt(i).getEnd() + ": " + dist);
+					
 					Node sibling = new Node(dist,
-										current,
-										(int) conn.getConnectionAt(i).getEnd());
+							current,
+							(int) conn.getConnectionAt(i).getEnd());
 					
 					//updating the distance of the sibling
 					if(dist < distances[(int) conn.getConnectionAt(i).getEnd()]){
@@ -135,12 +139,13 @@ public class ShortestPath {
 //					System.out.println("Visited contains the sibling: " + visited.contains(sibling));
 					
 					//if the sibling have been remove, that is it has been not visited yet, then it is added with the update distance
-					sibling.setTotalCost(dist);
 					if(q.contains(sibling)){
-						q.remove(q);
+						q.remove(sibling);
+						sibling.setTotalCost(dist);
 						q.add(sibling);
 					}
 					else{
+						sibling.setTotalCost(dist);
 						q.add(sibling);
 					}
 					

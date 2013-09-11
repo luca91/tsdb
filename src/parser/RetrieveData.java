@@ -1,10 +1,13 @@
-package data;
+package parser;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
+
+import model.NodeConnections;
+import model.Road;
 
 public class RetrieveData {
 
@@ -33,7 +36,7 @@ public class RetrieveData {
 	public void manageData(){
 		int currentStart = 0, currentEnd = 0;
 		Road currentRoad;
-		data.Connection connectionsData; 
+		model.Connection connectionsData; 
 		NodeConnections aConn;
 		Vector<Integer> nodeChecked = new Vector<Integer>();
 //		System.out.println("Number of node to check is: "+roads.size());
@@ -74,7 +77,7 @@ public class RetrieveData {
 			}
 				
 			//setting the connection (start node)
-			connectionsData = new data.Connection(currentRoad.getEdgeId(), currentEnd, currentRoad.getDistance());
+			connectionsData = new model.Connection(currentRoad.getEdgeId(), currentEnd, currentRoad.getDistance());
 			aConn.setConnection(connectionsData);
 			allConnections[currentStart] = aConn;
 			
@@ -104,7 +107,7 @@ public class RetrieveData {
 			}
 			
 			//setting the connection (end node)
-			connectionsData = new data.Connection(currentRoad.getEdgeId(), currentStart, currentRoad.getDistance());
+			connectionsData = new model.Connection(currentRoad.getEdgeId(), currentStart, currentRoad.getDistance());
 			aConn.setConnection(connectionsData);
 			allConnections[currentEnd] = aConn;
 			
