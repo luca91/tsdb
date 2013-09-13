@@ -2,6 +2,9 @@ package main;
 
 import java.util.Vector;
 
+import landmark.Landmark;
+import landmark.SelectLandmark;
+
 import parser.RetrieveData;
 import database.DBConnection;
 import engine.ShortestPath;
@@ -15,7 +18,7 @@ public class Main {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		DBConnection conn = new DBConnection();
+/**		DBConnection conn = new DBConnection();
 		int source = -1, destination = -1;
 		if (conn.getDBConnection()==true)
 			System.out.println("DB connected!");
@@ -50,7 +53,9 @@ public class Main {
 		System.out.println();
 		System.out.printf("###############################################################\n");
 		System.out.printf("ALL PATH CALCULATION END\n");
-		System.out.printf("###############################################################");
+		System.out.printf("###############################################################");**/
+		SelectLandmark landmark = new SelectLandmark();
+		landmark.bestCoverage();
 	}
 
 }
