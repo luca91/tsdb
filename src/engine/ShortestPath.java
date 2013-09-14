@@ -14,7 +14,7 @@ import model.NodeConnections;
 public class ShortestPath {
 	
 	public static final double INFINITY = 9999.0;
-	public static final int ARRAY_LENGTH = 21048;
+	public static final int ARRAY_LENGTH = 11;
 	private Vector<Integer[]> pathAlreadyDone = new Vector<Integer[]>(1,1);
 	
 

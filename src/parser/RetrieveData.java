@@ -22,7 +22,8 @@ public class RetrieveData {
 	public void getDataFromDB(Connection conn) {			
 	    	try {
 	    		Statement stmt = conn.createStatement();            
-	            ResultSet rs = stmt.executeQuery("SELECT * FROM roads");
+	            //ResultSet rs = stmt.executeQuery("SELECT * FROM roads");
+	    		ResultSet rs = stmt.executeQuery("SELECT * FROM testRoad");
 	            while (rs.next()){
 	            	Road aRoad = new Road(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getDouble(4));
 	            	roads.add(aRoad);

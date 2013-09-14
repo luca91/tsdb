@@ -1,6 +1,7 @@
 package landmark;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,11 +15,14 @@ public class SelectLandmark {
 	public void bestCoverage() {	
 		System.out.println("Calclulation the landmarks.");
 		Vector<Vector> allPaths = new Vector<Vector>();
+		int nOF = new File("C:\\Users\\Simone\\Desktop\\paths\\").list().length;
+		System.out.println("Number of Files: "+nOF);
 			try {
-				for (int i=0; i<4; i++){
+				for (int i=0; i<nOF; i++){
 					FileReader fr;
 					//fr = new FileReader("C:\\Users\\Simone\\Dropbox\\Università\\Third Year\\Second Semester\\Temporal and Spatial Database\\Project\\paths\\path_nr_"+i+".txt.txt");
-					fr = new FileReader("C:\\Users\\Simone\\Desktop\\path\\path_nr_"+i+".txt.txt");
+//					fr = new FileReader("C:\\Users\\Simone\\Desktop\\path\\path_nr_"+i+".txt.txt");
+					fr = new FileReader("C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt");
 					@SuppressWarnings("resource")
 					BufferedReader br = new BufferedReader(fr);
 					Vector<Integer> path = new Vector<Integer>();
@@ -35,7 +39,14 @@ public class SelectLandmark {
 					}
 					if (path.size()<=2)
 					{
+						br.close();
+						fr.close();
 						System.out.println("Path too short. It will be dropped!");
+						File fileToDelete = new File("C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt");			
+						System.out.println("File to delete: "+fileToDelete.getName());
+						boolean ok = fileToDelete.delete();
+						if (ok == true)
+							System.out.println("File deleted!");
 					} else {
 						System.out.println("Path OK! It will be saved!");
 						System.out.println("Path: "+path);
