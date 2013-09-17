@@ -5,16 +5,35 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.Collections;
 
+import database.DBConnection;
+
+import model.Road;
+
 public class SelectLandmark {
 	
-	public void bestCoverage() {	
-		System.out.println("Calclulation the landmarks.");
-		Vector<Vector> allPaths = new Vector<Vector>();
+	Vector<Integer> vertices;
+	Vector<Vector> allPaths;
+	
+	public SelectLandmark() {
+		vertices = new Vector<Integer>();
+		allPaths = new Vector<Vector>();
+	}
+	
+	public List<Landmark> recurrenceVertices() throws Exception {	
+		getVerticesFromDB();
+		List<Landmark> landmarkList = new ArrayList<Landmark>();
+//		System.out.println();
+		System.out.println("All vertices: "+vertices);
+		System.out.println("Calculation the landmarks.");		
 		int nOF = new File("C:\\Users\\Simone\\Desktop\\paths\\").list().length;
 		System.out.println("Number of Files: "+nOF);
 			try {
@@ -81,17 +100,23 @@ public class SelectLandmark {
 					}
 				}
 				System.out.println("Printing landmarks...");
-				List<Landmark> landmarkList = new ArrayList<Landmark>();
  				for (int k =0; k<landmarks.length; k++) {
 					System.out.println("Vertex "+k+" compares "+landmarks[k]+" times.");
 					Landmark l = new Landmark(k, landmarks[k]);
 					landmarkList.add(l);
 				}
+ 				System.out.println("Removing 0's landmark...");
+ 				for (int m=0; m<landmarkList.size(); m++){
+ 					if (landmarkList.get(m).counter==0)
+ 						landmarkList.remove(m);
+ 				}
 				System.out.println("Landmark sorted by conter presence in descending order:");
 				Collections.sort(landmarkList,Collections.reverseOrder(new Landmark.LadmarksComparator()));
 				for (Landmark item: landmarkList) {
 					System.out.println("Vertex "+item.landmarkID+" compares "+item.counter+" times.");
 				}
+				
+				
 					/**for (int h=0; h<tmpPath.size(); h++) {
 						boolean goAhead = true;
 						int curVertex = tmpPath.get(h);
@@ -132,7 +157,57 @@ public class SelectLandmark {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			return landmarkList;
 		}
+	
+	public void getVerticesFromDB() throws Exception{
+		try {
+			DBConnection conn = new DBConnection();
+    		Statement stmt = conn.getConn().createStatement();            
+            //ResultSet rs = stmt.executeQuery("SELECT * FROM roads");
+    		ResultSet rs = stmt.executeQuery("SELECT start_node_id, end_node_id FROM testRoad");
+            while (rs.next()){
+            	int start = rs.getInt(1);
+            	int end = rs.getInt(2);
+            	if (vertices.size() == 0)
+            		vertices.add(start);
+            	if (!vertices.contains(start))
+            		vertices.add(start);
+            	if (!vertices.contains(end))
+            		vertices.add(end);
+//            	aRoad.printRoad();
+            }
+        } catch (SQLException e) {
+        	System.out.println(e);
+        	}
+	}
+	
+	public void bestCoverage() throws Exception{
+		List<Landmark> landmarkList = recurrenceVertices();
+		int j=0;
+		System.out.println("Number of landmarks: "+landmarkList.size());
+		while (j < landmarkList.size()){
+			for (int i=0; i<allPaths.size(); i++){
+				@SuppressWarnings("unchecked")
+				Vector<Integer> path = allPaths.get(i);
+				System.out.println("Current path: "+path);
+				if (path.contains(landmarkList.get(j).landmarkID)){
+					System.out.println("Landmark contained!");
+					Collections.reverse(path);
+					landmarkList.get(j).path.add(path);
+					allPaths.remove(i);
+				}
+			}			
+			j++;
+		}
+		System.out.println("Final size allPaths: "+allPaths.size());
+		for (int h=0; h<landmarkList.size(); h++){
+			System.out.println("Landmark: "+landmarkList.get(h).landmarkID);
+			System.out.println("Landmark: "+landmarkList.get(h).path);
+		}
+		System.out.println("--- BEST COVERAGE TERMINATED! ---");
+	}
+	
 		
 	}
 

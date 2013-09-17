@@ -53,7 +53,7 @@ public class Main {
 		System.out.println();
 		System.out.printf("###############################################################\n");
 		System.out.printf("ALL PATH CALCULATION END\n");
-		System.out.printf("###############################################################");
+		System.out.printf("###############################################################\n");
 		SelectLandmark landmark = new SelectLandmark();
 		landmark.bestCoverage();
 	}

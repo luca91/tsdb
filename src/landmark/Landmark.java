@@ -1,14 +1,17 @@
 package landmark;
 import java.util.Comparator;
+import java.util.Vector;
 
 public class Landmark {
 	int landmarkID;
 	int counter;
+	Vector<Vector> path;
 	
 	public Landmark (int id, int c)
 	{
 		landmarkID = id;
 		counter = c;
+		path = new Vector<Vector>();
 	}
 	
 	/**public void incrementCounter() {
