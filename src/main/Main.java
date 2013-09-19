@@ -1,10 +1,6 @@
 package main;
 
-import java.util.Vector;
-
-import landmark.Landmark;
 import landmark.SelectLandmark;
-
 import parser.RetrieveData;
 import database.DBConnection;
 import engine.ShortestPath;
@@ -27,9 +23,9 @@ public class Main {
 		data.manageData();
 //		System.out.println(data.nodeConnectionsToString());
 		ShortestPath aPath = new ShortestPath();
-		System.out.printf("\n###############################################################\n");
-		System.out.printf("ALL PATH CALCULATION START\n");
-		System.out.printf("###############################################################\n\n");
+		System.out.println("###############################################################");
+		System.out.println("ALL PATH CALCULATION START");
+		System.out.println("###############################################################");
 		System.out.println("Searching for paths...");
 		for (int i = 0; i < 11; i++){
 //			System.out.printf("##########################\n");
@@ -51,11 +47,18 @@ public class Main {
 		}
 		System.out.println();
 		System.out.println();
-		System.out.printf("###############################################################\n");
-		System.out.printf("ALL PATH CALCULATION END\n");
-		System.out.printf("###############################################################\n");
-		SelectLandmark landmark = new SelectLandmark();
-		landmark.bestCoverage();
+		System.out.println("###############################################################");
+		System.out.println("ALL PATH CALCULATION END");
+		System.out.println("###############################################################");
+		SelectLandmark landmark = new SelectLandmark(conn.getConn());
+//		landmark.bestCoverage();
+		System.out.println("###############################################################");
+		System.out.println("LANMARK PART");
+		System.out.println("###############################################################");
+		landmark.landmarkBFS(data.getAllConnections());
+		System.out.println("###############################################################");
+		System.out.println("LANDMARK BFS END");
+		System.out.println("###############################################################");
 	}
 
 }

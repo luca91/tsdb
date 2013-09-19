@@ -5,8 +5,10 @@ import java.util.Vector;
 public class Landmark {
 	int landmarkID;
 	int counter;
+	@SuppressWarnings("rawtypes")
 	Vector<Vector> path;
 	
+	@SuppressWarnings("rawtypes")
 	public Landmark (int id, int c)
 	{
 		landmarkID = id;

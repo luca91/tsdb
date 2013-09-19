@@ -13,79 +13,79 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.Collections;
-
-import database.DBConnection;
-
-import model.Road;
+import engine.ShortestPath;
+import model.NodeConnections;
 
 public class SelectLandmark {
 	
 	Vector<Integer> vertices;
+	@SuppressWarnings("rawtypes")
 	Vector<Vector> allPaths;
+	List<Landmark> landmarkList;
+	Connection conn;
+	public static int NUMBER_VERTICES = 9;
 	
-	public SelectLandmark() {
+	@SuppressWarnings("rawtypes")
+	public SelectLandmark(Connection conn) {
 		vertices = new Vector<Integer>();
 		allPaths = new Vector<Vector>();
+		landmarkList = new ArrayList<Landmark>();
+		this.conn = conn;
 	}
 	
 	public List<Landmark> recurrenceVertices() throws Exception {	
-		getVerticesFromDB();
-		List<Landmark> landmarkList = new ArrayList<Landmark>();
-//		System.out.println();
-		System.out.println("All vertices: "+vertices);
-		System.out.println("Calculation the landmarks.");		
-		int nOF = new File("C:\\Users\\Simone\\Desktop\\paths\\").list().length;
-		System.out.println("Number of Files: "+nOF);
+		System.out.println("###############################################################");
+		System.out.println("Compute recurrences of vertices in paths");
+		System.out.println("###############################################################");
+		getVerticesFromDB();		
+		System.out.println("All vertices stored in a Vector<Integer> --> "+vertices);
+		System.out.println("Calculation the landmarks...");		
+		int nOF = new File("C:\\Users\\Simone\\Desktop\\paths\\").list().length-1;
+		System.out.println("Number of files: "+nOF+", needed to know how many paths we have to verify (The measure differs of 1 because there is a folder!)");
+		System.out.println("All the paths with length less or equal two will be deleted!");
 			try {
 				for (int i=0; i<nOF; i++){
 					FileReader fr;
 					//fr = new FileReader("C:\\Users\\Simone\\Dropbox\\Università\\Third Year\\Second Semester\\Temporal and Spatial Database\\Project\\paths\\path_nr_"+i+".txt.txt");
 //					fr = new FileReader("C:\\Users\\Simone\\Desktop\\path\\path_nr_"+i+".txt.txt");
 					fr = new FileReader("C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt");
-					@SuppressWarnings("resource")
 					BufferedReader br = new BufferedReader(fr);
 					Vector<Integer> path = new Vector<Integer>();
 					String tmp = br.readLine();
 					while (tmp!= null)
 					{						
-						//System.out.println(tmp);
 						if (tmp != null) {
 							int id = Integer.parseInt(tmp);
 							path.add(id);
 						}
-						//System.out.println(path);
 						tmp = br.readLine();
 					}
 					if (path.size()<=2)
 					{
 						br.close();
 						fr.close();
-						System.out.println("Path too short. It will be dropped!");
 						File fileToDelete = new File("C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt");			
-						System.out.println("File to delete: "+fileToDelete.getName());
 						boolean ok = fileToDelete.delete();
 						if (ok == true)
-							System.out.println("File deleted!");
+							System.out.println("The path of file "+fileToDelete.getName()+" is too short,\nso it is deleted!");
 					} else {
-						System.out.println("Path OK! It will be saved!");
-						System.out.println("Path: "+path);
 						allPaths.add(path);
+						System.out.println("The path of file path_nr_"+i+".txt is perfect ("+path+"),\nso it is stored!");
 					}
 				}
-				System.out.println("Total paths are: "+allPaths.size());
-				System.out.println("All paths: "+allPaths);
-				//Landmark l;
-				//Vector<Integer> landmarks = new Vector<Integer>();
-				int landmarks[] = new int[9];
+				System.out.println("The total number of paths filtered is: "+allPaths.size());
+				System.out.println("These are all paths: "+allPaths);
+				System.out.println("Computing recurrece...");
+				int landmarks[] = new int[NUMBER_VERTICES];
 				for (int j=0; j<allPaths.size(); j++) {
 					@SuppressWarnings("unchecked")
 					Vector<Integer> tmpPath = allPaths.get(j);
 					System.out.println("Current path size: "+tmpPath.size());
+					System.out.println("Current path: "+tmpPath);
 					for (int h=0; h<tmpPath.size(); h++) {
 						int curVertex = tmpPath.get(h);
 						int counter;
-						System.out.println("Path size: "+tmpPath.size());
-						System.out.println("Currente vertex: "+curVertex);
+						System.out.println("Current vertex: "+curVertex);
 						counter = landmarks[curVertex];
 						landmarks[curVertex] = counter+1;
 						/**if (landmarks.size() == 0 || landmarks.indexOf(curVertex) == -1) {
@@ -99,18 +99,21 @@ public class SelectLandmark {
 						}**/
 					}
 				}
-				System.out.println("Printing landmarks...");
- 				for (int k =0; k<landmarks.length; k++) {
-					System.out.println("Vertex "+k+" compares "+landmarks[k]+" times.");
+				System.out.println("Storing landmarks in a list...");
+ 				for (int k =0; k<NUMBER_VERTICES; k++) {
 					Landmark l = new Landmark(k, landmarks[k]);
 					landmarkList.add(l);
 				}
- 				System.out.println("Removing 0's landmark...");
+ 				System.out.println("Removing 0's landmarks...");
+ 				System.out.println("Landmark list size: "+landmarkList.size());
  				for (int m=0; m<landmarkList.size(); m++){
- 					if (landmarkList.get(m).counter==0)
+ 					System.out.println("Index --> "+m);
+ 					System.out.println(landmarkList.get(m).landmarkID+" -- "+landmarkList.get(m).counter);
+ 					if (landmarkList.get(m).counter==0) { 						
  						landmarkList.remove(m);
+ 					}
  				}
-				System.out.println("Landmark sorted by conter presence in descending order:");
+				System.out.println("Landmark sorted by counter presence in descending order:");
 				Collections.sort(landmarkList,Collections.reverseOrder(new Landmark.LadmarksComparator()));
 				for (Landmark item: landmarkList) {
 					System.out.println("Vertex "+item.landmarkID+" compares "+item.counter+" times.");
@@ -161,9 +164,11 @@ public class SelectLandmark {
 		}
 	
 	public void getVerticesFromDB() throws Exception{
-		try {
-			DBConnection conn = new DBConnection();
-    		Statement stmt = conn.getConn().createStatement();            
+		System.out.println("###############################################################");
+		System.out.println("Get vertices from database");
+		System.out.println("###############################################################");
+		try {			
+    		Statement stmt = conn.createStatement();            
             //ResultSet rs = stmt.executeQuery("SELECT * FROM roads");
     		ResultSet rs = stmt.executeQuery("SELECT start_node_id, end_node_id FROM testRoad");
             while (rs.next()){
@@ -175,7 +180,6 @@ public class SelectLandmark {
             		vertices.add(start);
             	if (!vertices.contains(end))
             		vertices.add(end);
-//            	aRoad.printRoad();
             }
         } catch (SQLException e) {
         	System.out.println(e);
@@ -184,28 +188,53 @@ public class SelectLandmark {
 	
 	public void bestCoverage() throws Exception{
 		List<Landmark> landmarkList = recurrenceVertices();
+		System.out.println("###############################################################");
+		System.out.println("BEST COVERAGE");
+		System.out.println("###############################################################");
 		int j=0;
-		System.out.println("Number of landmarks: "+landmarkList.size());
+		System.out.println("Number of all landmarks: "+landmarkList.size());
 		while (j < landmarkList.size()){
 			for (int i=0; i<allPaths.size(); i++){
 				@SuppressWarnings("unchecked")
 				Vector<Integer> path = allPaths.get(i);
 				System.out.println("Current path: "+path);
+				System.out.println("Control which path contains a specific landmark.");
 				if (path.contains(landmarkList.get(j).landmarkID)){
-					System.out.println("Landmark contained!");
+					System.out.println("Landmark contained! The path will be stored to landmark's object.");
 					Collections.reverse(path);
 					landmarkList.get(j).path.add(path);
-					allPaths.remove(i);
+					allPaths.remove(i);		
+					System.out.println("Path removed from allPaths vector.");
 				}
 			}			
 			j++;
 		}
-		System.out.println("Final size allPaths: "+allPaths.size());
+		System.out.println("Control that the final size of allPaths is '0' --> "+allPaths.size()+" <--");
 		for (int h=0; h<landmarkList.size(); h++){
 			System.out.println("Landmark: "+landmarkList.get(h).landmarkID);
-			System.out.println("Landmark: "+landmarkList.get(h).path);
+			System.out.println("Path associated: "+landmarkList.get(h).path);
 		}
 		System.out.println("--- BEST COVERAGE TERMINATED! ---");
+	}
+	
+	public void landmarkBFS(NodeConnections[] connections) throws Exception{
+		bestCoverage();
+		System.out.println("###############################################################");
+		System.out.println("LANDMARK BREATH FIRST SEARCH (DIJKSTRA'S ALGORITHM)");
+		System.out.println("###############################################################");
+		ShortestPath sp = new ShortestPath();
+		System.out.println("landmarklist size: "+landmarkList.size());
+		for (int i=0; i<landmarkList.size(); i++){
+			int curLandmark = landmarkList.get(i).landmarkID;
+			System.out.println("Current ath size: "+landmarkList.get(i).path.size());
+			for (int j=0; j<landmarkList.get(i).path.size(); j++){
+				@SuppressWarnings("unchecked")
+				Vector<Integer> path = landmarkList.get(i).path.get(j);
+				System.out.println("Creation of new files");
+				sp.calculatePath(connections, path.firstElement(), curLandmark, "C:\\Users\\Simone\\Desktop\\paths\\landmarkPaths\\path_src-land_nr_"+i);
+				sp.calculatePath(connections, path.lastElement(), curLandmark, "C:\\Users\\Simone\\Desktop\\paths\\landmarkPaths\\path_dest-land_nr_"+i);
+			}
+		}
 	}
 	
 		
