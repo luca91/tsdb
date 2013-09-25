@@ -40,8 +40,8 @@ public class SelectLandmark {
 		getVerticesFromDB();		
 		System.out.println("All vertices stored in a Vector<Integer> --> "+vertices);
 		System.out.println("Calculation the landmarks...");		
-//		int nOF = new File("C:\\Users\\Simone\\Desktop\\paths\\").list().length-1;
-		int nOF = new File("C:\\Users\\luca\\Desktop\\paths\\").list().length-1;
+		int nOF = new File("C:\\Users\\Simone\\Desktop\\paths\\").list().length-1;
+//		int nOF = new File("C:\\Users\\luca\\Desktop\\paths\\").list().length-1;
 		System.out.println("Number of files: "+nOF+", needed to know how many paths we have to verify (The measure differs of 2 because there is a folder!)");
 		System.out.println("All the paths with length less or equal two will be deleted!");
 			try {
@@ -49,7 +49,7 @@ public class SelectLandmark {
 					FileReader fr;
 					//fr = new FileReader("C:\\Users\\Simone\\Dropbox\\Università\\Third Year\\Second Semester\\Temporal and Spatial Database\\Project\\paths\\path_nr_"+i+".txt.txt");
 //					fr = new FileReader("C:\\Users\\Simone\\Desktop\\path\\path_nr_"+i+".txt.txt");
-					fr = new FileReader("C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt");
+					fr = new FileReader("C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt");
 					BufferedReader br = new BufferedReader(fr);
 					Vector<Integer> path = new Vector<Integer>();
 					String tmp = br.readLine();
@@ -65,8 +65,8 @@ public class SelectLandmark {
 					{
 						br.close();
 						fr.close();
-//						File fileToDelete = new File("C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt");	
-						File fileToDelete = new File("C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt");
+						File fileToDelete = new File("C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt");	
+//						File fileToDelete = new File("C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt");
 						boolean ok = fileToDelete.delete();
 						if (ok == true)
 							System.out.println("The path of file "+fileToDelete.getName()+" is too short,\nso it is deleted!");

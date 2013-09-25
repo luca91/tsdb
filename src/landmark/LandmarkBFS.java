@@ -20,35 +20,45 @@ public class LandmarkBFS {
 	public void landmarkBFS(NodeConnections[] connections, List<Landmark> landmarkList) throws Exception{
 		LandmarkConnection lc;
 		int source = 5;
-		int destination = 8;
+		int destination = 2;
 		System.out.println("###############################################################");
 		System.out.println("LANDMARK BREADTH FIRST SEARCH (DIJKSTRA'S ALGORITHM)");
 		System.out.println("###############################################################");
 		ShortestPath sp = new ShortestPath();
 		subgraphSrc = new Vector<LandmarkConnection>();
 		subgraphDest = new Vector<LandmarkConnection>();
-		System.out.println("landmarklist size: "+landmarkList.size());
+		System.out.println("Landmarklist size: "+landmarkList.size());
+		System.out.println("Start to compute the paths source/landmarks and destination/landmarks");
 		for (int i=0; i<landmarkList.size(); i++){
 			lc = null;
 			int curLandmark = landmarkList.get(i).landmarkID;
-			System.out.println("Current ath size: "+landmarkList.get(i).path.size());
-			System.out.println("Creation of new files");
+			System.out.println("Current Landmark :"+curLandmark+" (5,8)");
 			sp.calculatePath(connections, source, curLandmark, "", false);
 			lc = new LandmarkConnection(source, curLandmark, sp.getDistance());
 			subgraphSrc.add(lc);
+			System.out.println("Add a new path (source, landmark)");
 			lc = null;
 			sp.calculatePath(connections, destination, curLandmark, "", false);
 			lc = new LandmarkConnection(destination, curLandmark, sp.getDistance());
 			subgraphDest.add(lc);
+			System.out.println("Add a new path (destination, landmark)");
 		}
-		LandmarkConnection srcLand = minDistance(subgraphSrc);
-		LandmarkConnection destLand = minDistance(subgraphDest);
+		System.out.println("All paths among source, destination and landmarks are computed!");
+		System.out.println("Calculation of minimum path distance...");
+		System.out.println("Subgraph source size: "+subgraphSrc.size()+" --> "+subgraphSrc);
+		
+		LandmarkConnection srcLand = this.minDistance(subgraphSrc);
+		System.out.println("Subgraph source size: "+subgraphDest.size()+" --> "+subgraphDest);
+		LandmarkConnection destLand = this.minDistance(subgraphDest);
+		System.out.println(srcLand);
+		System.out.println(destLand);
 		double landDist = 0;
 		if (srcLand.getTo() != destLand.getTo()) {
 			sp.calculatePath(connections, srcLand.getTo(), destLand.getTo(), "", false);
 			landDist = sp.getDistance();
 		}
 		double totalCost = srcLand.getDistance() + destLand.getDistance() + landDist;
+		System.out.println(srcLand.getDistance() +"+"+ destLand.getDistance() +"+"+ landDist);
 		System.out.println("The total cost of the path ("+source+","+destination+") is " +totalCost);
 	}
 	
@@ -200,12 +210,15 @@ public class LandmarkBFS {
 	
 	public LandmarkConnection minDistance(Vector<LandmarkConnection> subgraph) {
 		LandmarkConnection lc = null;
-		double minDist = 0, tmp;
+		double minDist = subgraph.get(0).getDistance(), tmp;
 		for (int i=0; i<subgraph.size();i++) {
 			tmp = subgraph.get(i).getDistance();
+			System.out.println("TMP: "+tmp);
+			System.out.println("MIN: "+minDist);
 			if (tmp < minDist) {
 				minDist = tmp;
 				lc = subgraph.get(i);
+				System.out.println("Current landmark connection minimum is: "+lc.getTo()+ " with distance "+lc.getDistance());
 			}
 		}
 		return lc;

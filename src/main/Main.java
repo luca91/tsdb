@@ -38,8 +38,8 @@ public class Main {
 			} while (destination == -1 || source == -1);
 			if(!aPath.checkNodes(source, destination))
 //				allPath.add(aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt"));
-				aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt", true);
-//				aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i);
+//				aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt", true);
+				aPath.calculatePath(data.getAllConnections(), source, destination, "C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i, true);
 			System.gc();
 		}
 		System.out.println();
