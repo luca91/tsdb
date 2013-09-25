@@ -58,7 +58,7 @@ public class LandmarkBFS {
 			landDist = sp.getDistance();
 		}
 		double totalCost = srcLand.getDistance() + destLand.getDistance() + landDist;
-		System.out.println(srcLand.getDistance() +"+"+ destLand.getDistance() +"+"+ landDist);
+		System.out.println("The sum is:" +srcLand.getDistance() +"+"+ destLand.getDistance() +"+"+ landDist);
 		System.out.println("The total cost of the path ("+source+","+destination+") is " +totalCost);
 	}
 	
