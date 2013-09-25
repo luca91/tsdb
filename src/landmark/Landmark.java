@@ -30,4 +30,7 @@ public class Landmark {
 			}
 		}
 
+	public int getID(){
+		return this.landmarkID;
+	}
 }

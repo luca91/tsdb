@@ -16,6 +16,7 @@ public class ShortestPath {
 	public static final double INFINITY = 9999.0;
 	public static final int ARRAY_LENGTH = 11;
 	private Vector<Integer[]> pathAlreadyDone = new Vector<Integer[]>(1,1);
+	private double distance;
 	
 
 	public ShortestPath() {	}
@@ -27,7 +28,7 @@ public class ShortestPath {
 		return false;
 	}
 		
-	public void calculatePath(NodeConnections[] connections, int source, int destination, String fileName) throws IOException{
+	public void calculatePath(NodeConnections[] connections, int source, int destination, String fileName, boolean write) throws IOException{
 		
 //		File filePath = new File(fileName);
 //		FileWriter fwPath = new FileWriter(filePath+"_resultingPath.txt");
@@ -175,20 +176,21 @@ public class ShortestPath {
 		FileWriter fw = new FileWriter(aFile);
 	
 		//building the final path
-		while(cur != source){
+		if(write){
+			while(cur != source){
 				//adding the path to the list
-	//			System.out.println("Current: " + cur);
-//					resultingPath.add((int) cur);
 				fw.append(String.valueOf(cur)+"\n");	
-//				System.out.println("Current: "+cur+"\n");
-//				System.out.println("Previous: "+previous[cur]+"\n");
 				if (previous[cur] == -1)
 					break;
 				cur = (int) previous[cur];
+			}
+			fw.append(String.valueOf(source));
+			fw.flush();
+			fw.close();
 		}
-		fw.append(String.valueOf(source));
-		fw.flush();
-		fw.close();
+		else {
+			distance = distances[destination];
+		}
 		
 //		for (int i=0; i<resultingPath.size(); i++)
 //		{
@@ -218,5 +220,9 @@ public class ShortestPath {
 			System.out.printf(" --> ");
 		}
 		System.out.printf("END\n\n");
+	}
+	
+	public double getDistance() {
+		return distance;
 	}
 }

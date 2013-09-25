@@ -40,15 +40,16 @@ public class SelectLandmark {
 		getVerticesFromDB();		
 		System.out.println("All vertices stored in a Vector<Integer> --> "+vertices);
 		System.out.println("Calculation the landmarks...");		
-		int nOF = new File("C:\\Users\\Simone\\Desktop\\paths\\").list().length-1;
-		System.out.println("Number of files: "+nOF+", needed to know how many paths we have to verify (The measure differs of 1 because there is a folder!)");
+//		int nOF = new File("C:\\Users\\Simone\\Desktop\\paths\\").list().length-1;
+		int nOF = new File("C:\\Users\\luca\\Desktop\\paths\\").list().length-1;
+		System.out.println("Number of files: "+nOF+", needed to know how many paths we have to verify (The measure differs of 2 because there is a folder!)");
 		System.out.println("All the paths with length less or equal two will be deleted!");
 			try {
 				for (int i=0; i<nOF; i++){
 					FileReader fr;
 					//fr = new FileReader("C:\\Users\\Simone\\Dropbox\\Università\\Third Year\\Second Semester\\Temporal and Spatial Database\\Project\\paths\\path_nr_"+i+".txt.txt");
 //					fr = new FileReader("C:\\Users\\Simone\\Desktop\\path\\path_nr_"+i+".txt.txt");
-					fr = new FileReader("C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt");
+					fr = new FileReader("C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt");
 					BufferedReader br = new BufferedReader(fr);
 					Vector<Integer> path = new Vector<Integer>();
 					String tmp = br.readLine();
@@ -64,7 +65,8 @@ public class SelectLandmark {
 					{
 						br.close();
 						fr.close();
-						File fileToDelete = new File("C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt");			
+//						File fileToDelete = new File("C:\\Users\\Simone\\Desktop\\paths\\path_nr_"+i+".txt");	
+						File fileToDelete = new File("C:\\Users\\luca\\Desktop\\paths\\path_nr_"+i+".txt");
 						boolean ok = fileToDelete.delete();
 						if (ok == true)
 							System.out.println("The path of file "+fileToDelete.getName()+" is too short,\nso it is deleted!");
@@ -217,26 +219,8 @@ public class SelectLandmark {
 		System.out.println("--- BEST COVERAGE TERMINATED! ---");
 	}
 	
-	public void landmarkBFS(NodeConnections[] connections) throws Exception{
-		bestCoverage();
-		System.out.println("###############################################################");
-		System.out.println("LANDMARK BREATH FIRST SEARCH (DIJKSTRA'S ALGORITHM)");
-		System.out.println("###############################################################");
-		ShortestPath sp = new ShortestPath();
-		System.out.println("landmarklist size: "+landmarkList.size());
-		for (int i=0; i<landmarkList.size(); i++){
-			int curLandmark = landmarkList.get(i).landmarkID;
-			System.out.println("Current ath size: "+landmarkList.get(i).path.size());
-			for (int j=0; j<landmarkList.get(i).path.size(); j++){
-				@SuppressWarnings("unchecked")
-				Vector<Integer> path = landmarkList.get(i).path.get(j);
-				System.out.println("Creation of new files");
-				sp.calculatePath(connections, path.firstElement(), curLandmark, "C:\\Users\\Simone\\Desktop\\paths\\landmarkPaths\\path_src-land_nr_"+i);
-				sp.calculatePath(connections, path.lastElement(), curLandmark, "C:\\Users\\Simone\\Desktop\\paths\\landmarkPaths\\path_dest-land_nr_"+i);
-			}
-		}
+	public List<Landmark> getLandmarkList(){
+		return this.landmarkList;
 	}
-	
-		
-	}
+}
 
